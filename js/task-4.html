@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 0 10px;
+      text-align: center;
+      font-size: 30px;
+      background-color: red;
+      height: 50px;
+      line-height: 50px;
+      margin: 0 5px;
+      display: inline-block;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <input id="input" type="text">
+  <button id="left-in" onclick="push($('#input').value, 'left');">左侧入</button>
+  <button id="right-in" onclick="push($('#input').value, 'right');">右侧入</button>
+  <button id="left-out" onclick="pop('left');">左侧出</button>
+  <button id="right-out" onclick="pop('right')">右侧出</button>
+
+  <ul id="queue">
+
+  </ul>
+  <script type="text/javascript">
+    queue = [];
+
+    function $(ele) {
+      return document.querySelector(ele);
+    }
+
+    var merge = function() {
+      return Array.prototype.concat.apply([], arguments);
+    }
+    var splice = function(pos) {
+      return pos === "left" ? queue.splice(1, queue.length - 1) : queue.splice(0, queue.length - 1);
+    }
+
+    function pop(pos) {
+      if (!queue)
+        return;
+      alert(pos === "left" ? queue[0] : queue[queue.length - 1]);
+      queue = splice(pos);
+      render()
+    }
+
+    function push(data, pos) {
+      queue = (pos === "left" ? merge([data], queue) : merge(queue, [data]))
+      render()
+    }
+
+    function render() {
+      $("#queue").innerHTML = "";
+      [].forEach.call(queue, function(item) {
+        $("#queue").innerHTML += "<li>" + item + "</li>";
+      })
+    }
+  </script>
+
+</body>
+
+</html>
