@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    ul {
+      list-style: none;
+      padding-left: 0;
+      height: 200px;
+      vertical-align: bottom;
+    }
+
+    li {
+      display: inline-block;
+      background-color: red;
+      color: white;
+      height: 200px;
+      width: 20px;
+      margin-left: 1px;
+    }
+
+    li>div {
+      background-color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <input id="input" type="text">
+  <button id="left-in" onclick="push(valid(), 'left');">左侧入</button>
+  <button id="right-in" onclick="push(valid(), 'right');">右侧入</button>
+  <button id="left-out" onclick="pop('left');">左侧出</button>
+  <button id="right-out" onclick="pop('right')">右侧出</button>
+  <button id="sort">快速排序</button>
+
+  <ul id="queue">
+  </ul>
+  <script type="text/javascript">
+    queue = [];
+
+    function $(ele) {
+      return document.querySelector(ele);
+    }
+
+    var merge = function() {
+      return Array.prototype.concat.apply([], arguments);
+    }
+    var splice = function(pos) {
+      return pos === "left" ? queue.splice(1, queue.length - 1) : queue.splice(0, queue.length - 1);
+    }
+
+    function pop(pos) {
+      if (!queue)
+        return;
+      alert(pos === "left" ? queue[0] : queue[queue.length - 1]);
+      queue = splice(pos);
+      render()
+    }
+
+    function push(data, pos) {
+      if (data === 0)
+        return;
+      queue = (pos === "left" ? merge([data], queue) : merge(queue, [data]))
+      render()
+    }
+
+    function render() {
+      $("#queue").innerHTML = "";
+      var cnt = 0;
+      [].forEach.call(queue, function(item) {
+        $("#queue").innerHTML += "<li><div data-id='"+(cnt++)+"' style='height:" + (100 - item) + "%'></div></li>";
+      });
+      [].forEach.call($("#queue").children, function(li){
+          li.addEventListener('click', function(){
+            queue.splice(li.children[0].dataset.id, 1);
+            render();
+        })
+      });
+    }
+
+    function valid() {
+      var val = $('#input').value;
+      if (val < 10 || val > 100)
+        return 0;
+      if(queue.length>60){
+        alert("队列最多60个元素");
+        return 0;
+      }
+      return val;
+    }
+
+
+    function QuickSort(list, left, right) {
+      var i = left,
+        j = right,
+        k = list[i];
+
+      if (left <= right) {
+        var time = window.setInterval(function() {
+          if (i < j) {
+            while (list[j] >= k && i < j) {
+              j--;
+            }
+            list[i] = list[j];
+            while (list[i] <= k && i < j) {
+              i++;
+            }
+            list[j] = list[i];
+            render();
+          } else {
+            window.clearInterval(time);
+            list[i] = k;
+            render();
+            QuickSort(list, left, i - 1);
+            QuickSort(list, i + 1, right);
+          }
+        }, 10);
+      }
+      return;
+    }
+    $('#sort').addEventListener('click', function() {
+      QuickSort(queue, 0, queue.length - 1)
+    })
+  </script>
+
+</body>
+
+</html>

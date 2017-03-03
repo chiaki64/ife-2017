@@ -64,10 +64,17 @@
     }
 
     function render() {
+      var cnt = 0;
       $("#queue").innerHTML = "";
       [].forEach.call(queue, function(item) {
-        $("#queue").innerHTML += "<li>" + item + "</li>";
-      })
+        $("#queue").innerHTML += "<li data-id='" + (cnt++) + "'>" + item + "</li>";
+      });
+      [].forEach.call($("#queue").children, function(li) {
+        li.addEventListener('click', function() {
+          queue.splice(li.dataset.id, 1);
+          render();
+        })
+      });
     }
   </script>
 
