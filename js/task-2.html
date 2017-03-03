@@ -43,7 +43,7 @@
 
       [].forEach.call(aqiData, function(city) {
         if (city[1] > 60)
-          document.querySelector('#aqi-list').innerHTML += "<li>第" + ranks[++rank] + "名：" + city[0] + "，" + city[1] + "</li>"
+          document.querySelector('#aqi-list').innerHTML += "<li>第" + ranks[rank++] + "名：" + city[0] + "，" + city[1] + "</li>"
       })
     })();
   </script>
